@@ -88,6 +88,7 @@ from dojo.models import (
     General_Survey,
     Check_List,
     Announcement,
+    Webhook_Endpoints,
 )
 
 from dojo.tools.factory import (
@@ -3243,3 +3244,9 @@ class AnnouncementSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("No more than one Announcement is allowed")
             else:
                 raise
+
+
+class WebhookEndpointsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Webhook_Endpoints
+        fields = "__all__"
