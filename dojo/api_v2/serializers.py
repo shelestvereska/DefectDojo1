@@ -88,7 +88,7 @@ from dojo.models import (
     General_Survey,
     Check_List,
     Announcement,
-    Webhook_Endpoints,
+    Notification_Webhooks,
 )
 
 from dojo.tools.factory import (
@@ -3249,7 +3249,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
 class WebhookEndpointsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Webhook_Endpoints
+        model = Notification_Webhooks
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
