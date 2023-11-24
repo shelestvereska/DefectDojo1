@@ -154,7 +154,7 @@ class DojoDefaultReImporter(object):
                             # even if there is no mitigation time, skip it, because both the current finding and the reimported finding are is_mitigated
                             continue
                     else:
-                        if not do_not_reactivate: # findings in scan reactivate findings in DD
+                        if not do_not_reactivate:
                             logger.debug(
                                 "%i: reactivating: %i:%s:%s:%s",
                                 i,
