@@ -48,7 +48,6 @@ class DojoDefaultReImporter(object):
         items = parsed_findings
         original_items = list(test.finding_set.all())
         new_items = []
-        mitigated_count = 0
         finding_count = 0
         finding_added_count = 0
         reactivated_count = 0
@@ -142,7 +141,8 @@ class DojoDefaultReImporter(object):
                                     "New imported finding and already existing finding are both mitigated but have different dates, not taking action"
                                 )
                                 # TODO: implement proper date-aware reimporting mechanism, if an imported finding is closed more recently than the defectdojo finding, then there might be details in the scanner that should be added
-                    else: # Finding is mitigated but item is not
+                    # Finding is mitigated but item is not
+                    else:
                         if do_not_reactivate:
                             logger.debug(
                                 "%i: skipping reactivating by user's choice do_not_reactivate: %i:%s:%s:%s",
@@ -497,6 +497,10 @@ class DojoDefaultReImporter(object):
                 serialized_untouched,
             )
 
+        print("new_items:" + str(new_items))
+        print("reactivated_items:" + str(reactivated_items))
+        print("to_mitigate:" + str(to_mitigate))
+        print("untouched:" + str(untouched))
         return new_items, reactivated_items, to_mitigate, untouched
 
     def close_old_findings(
@@ -524,11 +528,16 @@ class DojoDefaultReImporter(object):
                 else:
                     finding.save(push_to_jira=push_to_jira, dedupe_option=False)
 
-                note = Notes(
+                existing_note = finding.notes.filter(
                     entry="Mitigated by %s re-upload." % test.test_type, author=user
                 )
-                note.save()
-                finding.notes.add(note)
+                if len(existing_note) == 0:
+                    note = Notes(
+                        entry="Mitigated by %s re-upload." % test.test_type, author=user
+                    )
+                    note.save()
+                    finding.notes.add(note)
+
                 mitigated_findings.append(finding)
 
         if is_finding_groups_enabled() and push_to_jira:
