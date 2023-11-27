@@ -22,6 +22,18 @@ logger = logging.getLogger(__name__)
 deduplicationLogger = logging.getLogger("dojo.specific-loggers.deduplication")
 
 
+def add_note_if_not_exists(finding, test, user, text):
+    existing_note = finding.notes.filter(
+        entry=text % test.test_type, author=user
+    )
+    if len(existing_note) == 0:
+        note = Notes(
+            entry=text % test.test_type, author=user
+        )
+        note.save()
+        finding.notes.add(note)
+
+
 class DojoDefaultReImporter(object):
     @dojo_async_task
     @app.task(ignore_result=False)
@@ -150,20 +162,8 @@ class DojoDefaultReImporter(object):
                                 existing_finding.component_name,
                                 existing_finding.component_version,
                             )
-                            existing_note = existing_finding.notes.filter(
-                                entry="Finding has skipped reactivation from %s re-upload with user decision do_not_reactivate."
-                                % scan_type,
-                                author=user,
-                            )
-                            if len(existing_note) == 0:
-                                note = Notes(
-                                    entry="Finding has skipped reactivation from %s re-upload with user decision do_not_reactivate."
-                                    % scan_type,
-                                    author=user,
-                                )
-                                note.save()
-                                existing_finding.notes.add(note)
-                                existing_finding.save(dedupe_option=False)
+                            add_note_if_not_exists(existing_finding, test, user, "Finding has skipped reactivation from %s re-upload with user decision do_not_reactivate.")
+                            existing_finding.save(dedupe_option=False)
                         else:
                             # i.e. Reactivate findings
                             if existing_finding.false_p or existing_finding.out_of_scope or existing_finding.risk_accepted:
@@ -239,11 +239,7 @@ class DojoDefaultReImporter(object):
                         existing_finding.active = False
                         if verified is not None:
                             existing_finding.verified = verified
-                        note = Notes(
-                            entry="Mitigated by %s re-upload." % test.test_type, author=user
-                        )
-                        note.save()
-                        existing_finding.notes.add(note)
+                        add_note_if_not_exists(existing_finding, test, user, "Mitigated by %s re-upload.")
                         existing_finding.save(dedupe_option=False)
                     #  reimported_finding is not mitigated but is risk accepted by the scanner
                     elif reimported_finding.risk_accepted:
@@ -532,16 +528,7 @@ class DojoDefaultReImporter(object):
                 else:
                     finding.save(push_to_jira=push_to_jira, dedupe_option=False)
 
-                existing_note = finding.notes.filter(
-                    entry="Mitigated by %s re-upload." % test.test_type, author=user
-                )
-                if len(existing_note) == 0:
-                    note = Notes(
-                        entry="Mitigated by %s re-upload." % test.test_type, author=user
-                    )
-                    note.save()
-                    finding.notes.add(note)
-
+                add_note_if_not_exists(finding, test, user, "Mitigated by %s re-upload.")
                 mitigated_findings.append(finding)
 
         if is_finding_groups_enabled() and push_to_jira:
