@@ -133,42 +133,16 @@ class DojoDefaultReImporter(object):
                                 "finding mitigated time: "
                                 + str(finding.mitigated.timestamp())
                             )
-                            if (
-                                item.mitigated.timestamp()
-                                == finding.mitigated.timestamp()
-                            ):
+                            if item.mitigated.timestamp() == finding.mitigated.timestamp():
                                 logger.debug(
                                     "New imported finding and already existing finding have the same mitigation date, will skip as they are the same."
                                 )
-                                continue
-                            if (
-                                item.mitigated.timestamp()
-                                != finding.mitigated.timestamp()
-                            ):
+                            else:
                                 logger.debug(
                                     "New imported finding and already existing finding are both mitigated but have different dates, not taking action"
                                 )
                                 # TODO: implement proper date-aware reimporting mechanism, if an imported finding is closed more recently than the defectdojo finding, then there might be details in the scanner that should be added
-                                continue
-                        else:
-                            # even if there is no mitigation time, skip it, because both the current finding and the reimported finding are is_mitigated
-                            continue
-                    else:
-                        if not do_not_reactivate:
-                            logger.debug(
-                                "%i: reactivating: %i:%s:%s:%s",
-                                i,
-                                finding.id,
-                                finding,
-                                finding.component_name,
-                                finding.component_version,
-                            )
-                            finding.mitigated = None
-                            finding.is_mitigated = False
-                            finding.mitigated_by = None
-                            finding.active = True
-                            if verified is not None:
-                                finding.verified = verified
+                    else: # Finding is mitigated but item is not
                         if do_not_reactivate:
                             logger.debug(
                                 "%i: skipping reactivating by user's choice do_not_reactivate: %i:%s:%s:%s",
@@ -192,38 +166,57 @@ class DojoDefaultReImporter(object):
                                 note.save()
                                 finding.notes.add(note)
                                 finding.save(dedupe_option=False)
-                            continue
-                    # existing findings may be from before we had component_name/version fields
-                    finding.component_name = (
-                        finding.component_name
-                        if finding.component_name
-                        else component_name
-                    )
-                    finding.component_version = (
-                        finding.component_version
-                        if finding.component_version
-                        else component_version
-                    )
+                        else:  # i.e. Reactivate findings (findings.isMitigated and NOT item.isMitigated)
+                            if finding.false_p or finding.out_of_scope or finding.risk_accepted:
+                                #  If the finding in DD is in one of these states, we no longer sync the scanners state
+                                #  similar to do_not_reactivate=True
+                                unchanged_items.append(finding)
+                                unchanged_count += 1
+                            else:
+                                logger.debug(
+                                    "%i: reactivating: %i:%s:%s:%s",
+                                    i,
+                                    finding.id,
+                                    finding,
+                                    finding.component_name,
+                                    finding.component_version,
+                                )
+                                finding.mitigated = None
+                                finding.is_mitigated = False
+                                finding.mitigated_by = None
+                                finding.active = True
+                                if verified is not None:
+                                    finding.verified = verified
+                                # existing findings may be from before we had component_name/version fields
+                                finding.component_name = (
+                                    finding.component_name
+                                    if finding.component_name
+                                    else component_name
+                                )
+                                finding.component_version = (
+                                    finding.component_version
+                                    if finding.component_version
+                                    else component_version
+                                )
 
-                    # don't dedupe before endpoints are added
-                    finding.save(dedupe_option=False)
-                    note = Notes(
-                        entry="Re-activated by %s re-upload." % scan_type, author=user
-                    )
-                    note.save()
+                                # don't dedupe before endpoints are added
+                                finding.save(dedupe_option=False)
+                                note = Notes(
+                                    entry="Re-activated by %s re-upload." % scan_type, author=user
+                                )
+                                note.save()
 
-                    endpoint_statuses = finding.status_finding.exclude(
-                        Q(false_positive=True)
-                        | Q(out_of_scope=True)
-                        | Q(risk_accepted=True)
-                    )
-                    reimporter_utils.chunk_endpoints_and_reactivate(endpoint_statuses)
+                                endpoint_statuses = finding.status_finding.exclude(
+                                    Q(false_positive=True)
+                                    | Q(out_of_scope=True)
+                                    | Q(risk_accepted=True)
+                                )
+                                reimporter_utils.chunk_endpoints_and_reactivate(endpoint_statuses)
 
-                    finding.notes.add(note)
-                    reactivated_items.append(finding)
-                    reactivated_count += 1
-                # finding is NOT MITIGATED!
-                # There is no need for special treatment of "false-positive" or "risk-accepted"
+                                finding.notes.add(note)
+                                reactivated_items.append(finding)
+                                reactivated_count += 1
+                # Existing finding is not mitigated
                 else:
                     logger.debug(
                         "Reimported item matches a finding that is currently open."
@@ -247,24 +240,46 @@ class DojoDefaultReImporter(object):
                         finding.active = False
                         if verified is not None:
                             finding.verified = verified
-                    # if both scanner and defectdojo agree but finding is not closed, we don't touch it.
-                    # keeps https://github.com/DefectDojo/django-DefectDojo/pull/7447 behaviour the same
-                    elif (finding.false_p == item.false_p
-                          and finding.out_of_scope == item.out_of_scope
-                          and finding.risk_accepted == item.risk_accepted):
+                        note = Notes(
+                            entry="Mitigated by %s re-upload." % test.test_type, author=user
+                        )
+                        note.save()
+                        finding.notes.add(note)
+                        finding.save(dedupe_option=False)
+                    #  Item is not mitigated but risk accepted by the scanner
+                    elif item.risk_accepted:
+                        # A risk accepted finding is not explicitly mitigated, so we need to add it to avoid mitigation
+                        # as otherwise it will get mitigated in close_old_findings
+                        # keeps https://github.com/DefectDojo/django-DefectDojo/pull/7447 behaviour the same
                         unchanged_items.append(finding)
                         unchanged_count += 1
-                    # If the scanner says the findings is either (risk-accepted, false positive or out of scope)
+                        if not finding.risk_accepted:
+                            #  If the finding in DD is not risk accepted yet we risk accept it and set it to inactive
+                            logger.debug('Reimported risk_accepted item matches a finding that is currently not risk_accepted.')
+                            logger.debug('%i: risk accepting: %i:%s:%s:%s', i, finding.id, finding, finding.component_name, finding.component_version)
+                            finding.risk_accepted = item.risk_accepted
+                            finding.active = False
+                            if verified is not None:
+                                finding.verified = verified
+                            note = Notes(
+                                entry="Risk accepted by %s re-upload." % test.test_type, author=user
+                            )
+                            note.save()
+                            finding.notes.add(note)
+                            finding.save(dedupe_option=False)
+                    # If the scanner says the findings is either
+                    # (false positive or out of scope but not risk accepted or mitigated)
                     # we take over these values and close the finding
-                    elif item.risk_accepted or item.false_p or item.out_of_scope:
-                        logger.debug('Reimported mitigated item matches a finding that is currently open, closing.')
+                    elif item.false_p or item.out_of_scope:
+                        logger.debug('Reimported false positive or out of scope'
+                                     ' item matches a finding that is currently open, closing.')
                         logger.debug('%i: closing: %i:%s:%s:%s', i, finding.id, finding, finding.component_name, finding.component_version)
-                        finding.risk_accepted = item.risk_accepted
                         finding.false_p = item.false_p
                         finding.out_of_scope = item.out_of_scope
                         finding.active = False
                         if verified is not None:
                             finding.verified = verified
+                        # because finding is not added to unchanged_items, it will get mitigated in close_old_findings
                     else:
                         # if finding is the same but list of affected was changed, finding is marked as unchanged. This is a known issue
                         unchanged_items.append(finding)
