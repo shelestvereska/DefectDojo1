@@ -497,10 +497,6 @@ class DojoDefaultReImporter(object):
                 serialized_untouched,
             )
 
-        print("new_items:" + str(new_findings))
-        print("reactivated_items:" + str(reactivated_items))
-        print("to_mitigate:" + str(to_mitigate))
-        print("untouched:" + str(untouched))
         return new_findings, reactivated_items, to_mitigate, untouched
 
     def close_old_findings(
