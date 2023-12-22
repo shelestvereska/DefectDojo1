@@ -38,7 +38,7 @@ class DojoTestUtilsMixin(object):
         enable_jira_web_hook=False,
         disable_jira_webhook_secret=False,
         jira_webhook_secret=None,
-        enable_product_tag_inehritance=False,
+        enable_product_tag_inehritance=False, 
     ):
         ss = System_Settings.objects.get()
         ss.enable_jira = enable_jira
@@ -739,6 +739,15 @@ class DojoAPITestCase(APITestCase, DojoTestUtilsMixin):
         logger.debug('endpoint statuses')
         for eps in Endpoint_Status.objects.all():
             logger.debug(str(eps.id) + ': ' + str(eps.endpoint) + ': ' + str(eps.endpoint.id) + ': ' + str(eps.mitigated))
+
+
+class DojoParserTestCase(DojoTestCase):
+
+    parser = None
+
+    def test_parser_definition(self):
+        if type(self) is not DojoParserTestCase:  # do not run test for the original class
+            self.assertIsNotNone(self.parser, "Unittest does not defined parser")
 
 
 class DojoVCRTestCase(DojoTestCase, VCRTestCase):

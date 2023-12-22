@@ -1,21 +1,21 @@
 from datetime import date
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.azure_security_center_recommendations.parser import AzureSecurityCenterRecommendationsParser
 from dojo.models import Test
 
 
-class TestAzureSecurityCenterRecommendationsParser(DojoTestCase):
+class TestAzureSecurityCenterRecommendationsParser(DojoParserTestCase):
+
+    parser = AzureSecurityCenterRecommendationsParser()
 
     def test_parse_file_with_no_findings(self):
         testfile = open("unittests/scans/azure_security_center_recommendations/zero_vulns.csv")
-        parser = AzureSecurityCenterRecommendationsParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_file_with_multiple_findings(self):
         testfile = open("unittests/scans/azure_security_center_recommendations/many_vulns.csv")
-        parser = AzureSecurityCenterRecommendationsParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
 
         self.assertEqual(3, len(findings))
 

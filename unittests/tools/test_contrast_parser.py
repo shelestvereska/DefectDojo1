@@ -1,20 +1,21 @@
 import datetime
 
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 
 from dojo.models import Test, Engagement, Product
 from dojo.tools.contrast.parser import ContrastParser
 
 
-class TestContrastParser(DojoTestCase):
+class TestContrastParser(DojoParserTestCase):
+
+    parser = ContrastParser()
 
     def test_example_report(self):
         test = Test()
         test.engagement = Engagement()
         test.engagement.product = Product()
         testfile = open("unittests/scans/contrast/contrast-node-goat.csv")
-        parser = ContrastParser()
-        findings = parser.get_findings(testfile, test)
+        findings = self.parser.get_findings(testfile, test)
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()
@@ -58,8 +59,7 @@ class TestContrastParser(DojoTestCase):
         test.engagement = Engagement()
         test.engagement.product = Product()
         testfile = open("unittests/scans/contrast/vulnerabilities2020-09-21.csv")
-        parser = ContrastParser()
-        findings = parser.get_findings(testfile, test)
+        findings = self.parser.get_findings(testfile, test)
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()

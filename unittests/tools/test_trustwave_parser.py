@@ -1,6 +1,6 @@
 import os.path
 
-from ..dojo_test_case import DojoTestCase, get_unit_tests_path
+from ..dojo_test_case import DojoParserTestCase, get_unit_tests_path
 from dojo.tools.trustwave.parser import TrustwaveParser
 from dojo.models import Test, Engagement, Product
 
@@ -9,15 +9,16 @@ def sample_path(file_name):
     return os.path.join(get_unit_tests_path() + "/scans/trustwave", file_name)
 
 
-class TestTrustwaveParser(DojoTestCase):
+class TestTrustwaveParser(DojoParserTestCase):
+
+    parser = TrustwaveParser()
 
     def test_no_vuln(self):
         test = Test()
         test.engagement = Engagement()
         test.engagement.product = Product()
         test_file = open(sample_path("many_vulns.csv"))
-        parser = TrustwaveParser()
-        findings = parser.get_findings(test_file, test)
+        findings = self.parser.get_findings(test_file, test)
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()

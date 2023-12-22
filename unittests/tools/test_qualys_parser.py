@@ -1,24 +1,24 @@
-from ..dojo_test_case import DojoTestCase, get_unit_tests_path
+from ..dojo_test_case import DojoParserTestCase, get_unit_tests_path
 from dojo.models import Test
 from dojo.tools.qualys.parser import QualysParser
 
 
-class TestQualysParser(DojoTestCase):
+class TestQualysParser(DojoParserTestCase):
+
+    parser = QualysParser()
 
     def test_parse_file_with_no_vuln_has_no_findings(self):
         testfile = open(
             get_unit_tests_path() + "/scans/qualys/empty.xml"
         )
-        parser = QualysParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_file_with_multiple_vuln_has_multiple_findings(self):
         testfile = open(
             get_unit_tests_path() + "/scans/qualys/Qualys_Sample_Report.xml"
         )
-        parser = QualysParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()
@@ -56,16 +56,14 @@ class TestQualysParser(DojoTestCase):
         testfile = open(
             get_unit_tests_path() + "/scans/qualys/empty.csv"
         )
-        parser = QualysParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_file_with_multiple_vuln_has_multiple_findings_csv(self):
         testfile = open(
             get_unit_tests_path() + "/scans/qualys/Qualys_Sample_Report.csv"
         )
-        parser = QualysParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()

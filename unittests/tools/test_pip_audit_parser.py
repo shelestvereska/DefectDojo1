@@ -1,29 +1,28 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 
 from dojo.models import Test
 from dojo.tools.pip_audit.parser import PipAuditParser
 
 
-class TestPipAuditParser(DojoTestCase):
+class TestPipAuditParser(DojoParserTestCase):
+
+    parser = PipAuditParser()
 
     def test_parser_empty(self):
         testfile = open("unittests/scans/pip_audit/empty.json")
-        parser = PipAuditParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         self.assertEqual(0, len(findings))
 
     def test_parser_zero_findings(self):
         testfile = open("unittests/scans/pip_audit/zero_vulns.json")
-        parser = PipAuditParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         self.assertEqual(0, len(findings))
 
     def test_parser_many_vulns(self):
         testfile = open("unittests/scans/pip_audit/many_vulns.json")
-        parser = PipAuditParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         self.assertEqual(7, len(findings))
 

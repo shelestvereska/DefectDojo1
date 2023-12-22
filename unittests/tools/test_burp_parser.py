@@ -1,16 +1,17 @@
 from os import path
 
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.models import Test
 from dojo.tools.burp.parser import BurpParser
 
 
-class TestBurpParser(DojoTestCase):
+class TestBurpParser(DojoParserTestCase):
+
+    parser = BurpParser()
 
     def test_burp_with_one_vuln_has_one_finding(self):
         with open(path.join(path.dirname(__file__), "../scans/burp/one_finding.xml")) as test_file:
-            parser = BurpParser()
-            findings = parser.get_findings(test_file, Test())
+            findings = self.parser.get_findings(test_file, Test())
             for finding in findings:
                 for endpoint in finding.unsaved_endpoints:
                     endpoint.clean()
@@ -21,8 +22,7 @@ class TestBurpParser(DojoTestCase):
 
     def test_burp_with_multiple_vulns_has_multiple_findings(self):
         with open(path.join(path.dirname(__file__), "../scans/burp/seven_findings.xml")) as test_file:
-            parser = BurpParser()
-            findings = parser.get_findings(test_file, Test())
+            findings = self.parser.get_findings(test_file, Test())
             for finding in findings:
                 for endpoint in finding.unsaved_endpoints:
                     endpoint.clean()
@@ -35,8 +35,7 @@ class TestBurpParser(DojoTestCase):
 
     def test_burp_with_one_vuln_with_blank_response(self):
         with open(path.join(path.dirname(__file__), "../scans/burp/one_finding_with_blank_response.xml")) as test_file:
-            parser = BurpParser()
-            findings = parser.get_findings(test_file, Test())
+            findings = self.parser.get_findings(test_file, Test())
             for finding in findings:
                 for endpoint in finding.unsaved_endpoints:
                     endpoint.clean()
@@ -51,8 +50,7 @@ class TestBurpParser(DojoTestCase):
 
     def test_burp_with_one_vuln_with_cwe(self):
         with open(path.join(path.dirname(__file__), "../scans/burp/one_finding_with_cwe.xml")) as test_file:
-            parser = BurpParser()
-            findings = parser.get_findings(test_file, Test())
+            findings = self.parser.get_findings(test_file, Test())
             for finding in findings:
                 for endpoint in finding.unsaved_endpoints:
                     endpoint.clean()
@@ -67,8 +65,7 @@ class TestBurpParser(DojoTestCase):
 
     def test_burp_issue4399(self):
         with open(path.join(path.dirname(__file__), "../scans/burp/issue4399.xml")) as test_file:
-            parser = BurpParser()
-            findings = parser.get_findings(test_file, Test())
+            findings = self.parser.get_findings(test_file, Test())
             for finding in findings:
                 for endpoint in finding.unsaved_endpoints:
                     endpoint.clean()

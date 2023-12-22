@@ -1,14 +1,16 @@
 from dojo.models import Test
 from dojo.tools.fortify.parser import FortifyParser
 
-from ..dojo_test_case import DojoTestCase, get_unit_tests_path
+from ..dojo_test_case import DojoParserTestCase, get_unit_tests_path
 
 
-class TestFortifyParser(DojoTestCase):
+class TestFortifyParser(DojoParserTestCase):
+
+    parser = FortifyParser()
+
     def test_fortify_many_findings(self):
         testfile = get_unit_tests_path() + "/scans/fortify/fortify_many_findings.xml"
-        parser = FortifyParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(324, len(findings))
         with self.subTest(i=0):
             finding = findings[0]
@@ -19,8 +21,7 @@ class TestFortifyParser(DojoTestCase):
 
     def test_fortify_few_findings(self):
         testfile = get_unit_tests_path() + "/scans/fortify/fortify_few_findings.xml"
-        parser = FortifyParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(2, len(findings))
         with self.subTest(i=0):
             finding = findings[0]
@@ -32,8 +33,7 @@ class TestFortifyParser(DojoTestCase):
 
     def test_fortify_few_findings_count_chart(self):
         testfile = get_unit_tests_path() + "/scans/fortify/fortify_few_findings_count_chart.xml"
-        parser = FortifyParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(3, len(findings))
         with self.subTest(i=0):
             finding = findings[0]
@@ -45,8 +45,7 @@ class TestFortifyParser(DojoTestCase):
 
     def test_fortify_issue6260(self):
         testfile = get_unit_tests_path() + "/scans/fortify/issue6260.xml"
-        parser = FortifyParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(16, len(findings))
         with self.subTest(i=0):
             finding = findings[0]
@@ -58,8 +57,7 @@ class TestFortifyParser(DojoTestCase):
 
     def test_fortify_issue6082(self):
         testfile = get_unit_tests_path() + "/scans/fortify/issue6082.xml"
-        parser = FortifyParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(2, len(findings))
         with self.subTest(i=0):
             finding = findings[0]

@@ -1,16 +1,17 @@
 import datetime
 
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.models import Test
 from dojo.tools.acunetix.parser import AcunetixParser
 
 
-class TestAcunetixParser(DojoTestCase):
+class TestAcunetixParser(DojoParserTestCase):
+
+    parser = AcunetixParser()
 
     def test_parse_file_with_one_finding(self):
         testfile = open("unittests/scans/acunetix/one_finding.xml")
-        parser = AcunetixParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()
@@ -37,8 +38,7 @@ class TestAcunetixParser(DojoTestCase):
 
     def test_parse_file_with_multiple_finding(self):
         testfile = open("unittests/scans/acunetix/many_findings.xml")
-        parser = AcunetixParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()
@@ -132,8 +132,7 @@ class TestAcunetixParser(DojoTestCase):
 
     def test_parse_file_with_example_com(self):
         testfile = open("unittests/scans/acunetix/XML_http_example_co_id_.xml")
-        parser = AcunetixParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()

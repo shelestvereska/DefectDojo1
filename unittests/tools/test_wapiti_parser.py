@@ -1,15 +1,16 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.wapiti.parser import WapitiParser
 from dojo.models import Test
 
 
-class TestWapitiParser(DojoTestCase):
+class TestWapitiParser(DojoParserTestCase):
+
+    parser = WapitiParser()
 
     def test_parse_file_3_0_4(self):
         """Generated with version 3.0.4 on OWASP Juicy Shop"""
         testfile = open("unittests/scans/wapiti/juicyshop.xml")
-        parser = WapitiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()
@@ -29,8 +30,7 @@ class TestWapitiParser(DojoTestCase):
     def test_parse_file_demo(self):
         """"""
         testfile = open("unittests/scans/wapiti/demo.xml")
-        parser = WapitiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()
@@ -42,8 +42,7 @@ class TestWapitiParser(DojoTestCase):
     def test_parse_file_example(self):
         """"""
         testfile = open("unittests/scans/wapiti/example.xml")
-        parser = WapitiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()
@@ -55,8 +54,7 @@ class TestWapitiParser(DojoTestCase):
     def test_parse_cwe(self):
         """File to test CWE"""
         testfile = open("unittests/scans/wapiti/cwe.xml")
-        parser = WapitiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()

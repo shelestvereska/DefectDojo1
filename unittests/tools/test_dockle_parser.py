@@ -1,20 +1,20 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.dockle.parser import DockleParser
 from dojo.models import Test
 
 
-class TestDockleParser(DojoTestCase):
+class TestDockleParser(DojoParserTestCase):
+
+    parser = DockleParser()
 
     def test_parse_no_findings(self):
         testfile = open("unittests/scans/dockle/no_findings.json")
-        parser = DockleParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_many_findings(self):
         testfile = open("unittests/scans/dockle/many_findings.json")
-        parser = DockleParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(3, len(findings))
 
         with self.subTest(i=0):

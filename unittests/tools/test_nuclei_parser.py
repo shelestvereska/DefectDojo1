@@ -1,28 +1,27 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.nuclei.parser import NucleiParser
 from dojo.models import Test
 from datetime import datetime
 from dateutil.tz import tzoffset
 
 
-class TestNucleiParser(DojoTestCase):
+class TestNucleiParser(DojoParserTestCase):
+
+    parser = NucleiParser()
 
     def test_parse_no_empty(self):
         testfile = open("unittests/scans/nuclei/empty.jsonl")
-        parser = NucleiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_no_findings(self):
         testfile = open("unittests/scans/nuclei/no_findings.json")
-        parser = NucleiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_many_findings(self):
         testfile = open("unittests/scans/nuclei/many_findings.json")
-        parser = NucleiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
@@ -142,8 +141,7 @@ class TestNucleiParser(DojoTestCase):
 
     def test_parse_many_findings_new(self):
         testfile = open("unittests/scans/nuclei/many_findings_new.json")
-        parser = NucleiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
@@ -184,8 +182,7 @@ class TestNucleiParser(DojoTestCase):
 
     def test_parse_many_findings_third(self):
         testfile = open("unittests/scans/nuclei/many_findings_third.json")
-        parser = NucleiParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:

@@ -1,19 +1,20 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.nsp.parser import NspParser
 from dojo.models import Test
 
 
-class TestNspParser(DojoTestCase):
+class TestNspParser(DojoParserTestCase):
+
+    parser = NspParser()
+
     def test_parse_none(self):
-        parser = NspParser()
         with open("unittests/scans/nsp/none.json") as test_file:
-            findings = parser.get_findings(test_file, Test())
+            findings = self.parser.get_findings(test_file, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_ok(self):
-        parser = NspParser()
         with open("unittests/scans/nsp/scan.json") as test_file:
-            findings = parser.get_findings(test_file, Test())
+            findings = self.parser.get_findings(test_file, Test())
         self.assertEqual(9, len(findings))
 
         # Count each type of finding to check afterwards

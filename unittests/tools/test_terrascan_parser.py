@@ -1,20 +1,20 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.terrascan.parser import TerrascanParser
 from dojo.models import Test
 
 
-class TestTerrascanParser(DojoTestCase):
+class TestTerrascanParser(DojoParserTestCase):
+
+    parser = TerrascanParser()
 
     def test_parse_no_findings(self):
         testfile = open("unittests/scans/terrascan/no_findings.json")
-        parser = TerrascanParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_many_findings(self):
         testfile = open("unittests/scans/terrascan/many_findings.json")
-        parser = TerrascanParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(9, len(findings))
 
         with self.subTest(i=0):

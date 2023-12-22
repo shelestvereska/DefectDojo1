@@ -1,6 +1,6 @@
 import os.path
 import datetime
-from ..dojo_test_case import DojoTestCase, get_unit_tests_path
+from ..dojo_test_case import DojoParserTestCase, get_unit_tests_path
 from dojo.tools.trufflehog3.parser import TruffleHog3Parser
 from dojo.models import Test
 
@@ -9,18 +9,18 @@ def sample_path(file_name):
     return os.path.join(get_unit_tests_path() + "/scans/trufflehog3", file_name)
 
 
-class TestTruffleHog3Parser(DojoTestCase):
+class TestTruffleHog3Parser(DojoParserTestCase):
+
+    parser = TruffleHog3Parser()
 
     def test_zero_vulns(self):
         test_file = open(sample_path("zero_vulns.json"))
-        parser = TruffleHog3Parser()
-        findings = parser.get_findings(test_file, Test())
+        findings = self.parser.get_findings(test_file, Test())
         self.assertEqual(len(findings), 0)
 
     def test_many_vulns_legacy(self):
         test_file = open(sample_path("many_vulns_legacy.json"))
-        parser = TruffleHog3Parser()
-        findings = parser.get_findings(test_file, Test())
+        findings = self.parser.get_findings(test_file, Test())
         self.assertEqual(len(findings), 7)
         # {
         #     "date": "2018-05-28 03:24:03",
@@ -46,8 +46,7 @@ class TestTruffleHog3Parser(DojoTestCase):
 
     def test_many_vulns2_legacy(self):
         test_file = open(sample_path("many_vulns2_legacy.json"))
-        parser = TruffleHog3Parser()
-        findings = parser.get_findings(test_file, Test())
+        findings = self.parser.get_findings(test_file, Test())
         self.assertEqual(len(findings), 27)
         finding = findings[0]
         self.assertEqual("High", finding.severity)
@@ -57,8 +56,7 @@ class TestTruffleHog3Parser(DojoTestCase):
 
     def test_many_vulns_current(self):
         test_file = open(sample_path("many_vulns_current.json"))
-        parser = TruffleHog3Parser()
-        findings = parser.get_findings(test_file, Test())
+        findings = self.parser.get_findings(test_file, Test())
         self.assertEqual(len(findings), 3)
 
         finding = findings[0]

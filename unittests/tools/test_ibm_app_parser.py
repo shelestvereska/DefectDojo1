@@ -1,14 +1,15 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.models import Test
 from dojo.tools.ibm_app.parser import IbmAppParser
 
 
-class TestIbmAppParser(DojoTestCase):
+class TestIbmAppParser(DojoParserTestCase):
+
+    parser = IbmAppParser()
 
     def test_parse_file(self):
         testfile = open("unittests/scans/ibm_app/testfire.xml")
-        parser = IbmAppParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
                 endpoint.clean()

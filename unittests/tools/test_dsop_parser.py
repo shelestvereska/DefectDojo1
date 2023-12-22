@@ -1,20 +1,21 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.dsop.parser import DsopParser
 
 from dojo.models import Test
 
 
-class TestDsopParser(DojoTestCase):
+class TestDsopParser(DojoParserTestCase):
+
+    parser = DsopParser()
+
     def test_zero_findings(self):
         testfile = open("unittests/scans/dsop/zero_vuln.xlsx", "rb")
-        parser = DsopParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(len(findings), 0)
 
     def test_many_findings(self):
         testfile = open("unittests/scans/dsop/many_vuln.xlsx", "rb")
-        parser = DsopParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(len(findings), 4)
         finding = findings[0]
         self.assertEqual("Low", finding.severity)

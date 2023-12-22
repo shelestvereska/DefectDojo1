@@ -1,21 +1,21 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.auditjs.parser import AuditJSParser
 from dojo.models import Test
 
 
-class TestAuditJSParser(DojoTestCase):
+class TestAuditJSParser(DojoParserTestCase):
+
+    parser = AuditJSParser()
 
     def test_auditjs_parser_with_no_vuln_has_no_findings(self):
         testfile = open("unittests/scans/auditjs/auditjs_zero_vul.json")
-        parser = AuditJSParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         self.assertEqual(0, len(findings))
 
     def test_auditjs_parser_with_one_criticle_vuln_has_one_findings(self):
         testfile = open("unittests/scans/auditjs/auditjs_one_vul.json")
-        parser = AuditJSParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
@@ -35,8 +35,7 @@ class TestAuditJSParser(DojoTestCase):
 
     def test_auditjs_parser_with_many_vuln_has_many_findings(self):
         testfile = open("unittests/scans/auditjs/auditjs_many_vul.json")
-        parser = AuditJSParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
@@ -62,8 +61,7 @@ class TestAuditJSParser(DojoTestCase):
     def test_auditjs_parser_empty_with_error(self):
         with self.assertRaises(ValueError) as context:
             testfile = open("unittests/scans/auditjs/empty_with_error.json")
-            parser = AuditJSParser()
-            parser.get_findings(testfile, Test())
+            self.parser.get_findings(testfile, Test())
             testfile.close()
             self.assertTrue(
                 "Invalid JSON format. Are you sure you used --json option ?" in str(context.exception)
@@ -71,8 +69,7 @@ class TestAuditJSParser(DojoTestCase):
 
     def test_auditjs_parser_with_package_name_has_namespace(self):
         testfile = open("unittests/scans/auditjs/auditjs_with_package_namespace.json")
-        parser = AuditJSParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
 
         self.assertEqual(1, len(findings))

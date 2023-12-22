@@ -1,22 +1,22 @@
 import datetime
 from dateutil.tz import tzlocal
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.tools.detect_secrets.parser import DetectSecretsParser
 from dojo.models import Test
 
 
-class TestDetectSecretsParser(DojoTestCase):
+class TestDetectSecretsParser(DojoParserTestCase):
+
+    parser = DetectSecretsParser()
 
     def test_parse_no_findings(self):
         testfile = open("unittests/scans/detect_secrets/no_findings.json")
-        parser = DetectSecretsParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(0, len(findings))
 
     def test_parse_many_findings(self):
         testfile = open("unittests/scans/detect_secrets/many_findings.json")
-        parser = DetectSecretsParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(4, len(findings))
 
         with self.subTest(i=0):

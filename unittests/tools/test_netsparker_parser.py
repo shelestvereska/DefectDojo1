@@ -1,14 +1,15 @@
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.models import Test
 from dojo.tools.netsparker.parser import NetsparkerParser
 
 
-class TestNetsparkerParser(DojoTestCase):
+class TestNetsparkerParser(DojoParserTestCase):
+
+    parser = NetsparkerParser()
 
     def test_parse_file_with_one_finding(self):
         testfile = open("unittests/scans/netsparker/netsparker_one_finding.json")
-        parser = NetsparkerParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(1, len(findings))
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:
@@ -27,8 +28,7 @@ class TestNetsparkerParser(DojoTestCase):
 
     def test_parse_file_with_multiple_finding(self):
         testfile = open("unittests/scans/netsparker/netsparker_many_findings.json")
-        parser = NetsparkerParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         self.assertEqual(16, len(findings))
         for finding in findings:
             for endpoint in finding.unsaved_endpoints:

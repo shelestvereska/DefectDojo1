@@ -1,21 +1,22 @@
 from os import path
-from ..dojo_test_case import DojoTestCase
+from ..dojo_test_case import DojoParserTestCase
 from dojo.models import Test
 from dojo.tools.neuvector.parser import NeuVectorParser
 
 
-class TestNeuVectorParser(DojoTestCase):
+class TestNeuVectorParser(DojoParserTestCase):
+
+    parser = NeuVectorParser()
+
     def test_parse_file_with_no_vuln(self):
         testfile = open(path.join(path.dirname(__file__), "../scans/neuvector/no_vuln.json"))
-        parser = NeuVectorParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         self.assertEqual(0, len(findings))
 
     def test_parse_file_with_one_vuln(self):
         testfile = open(path.join(path.dirname(__file__), "../scans/neuvector/one_vuln.json"))
-        parser = NeuVectorParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         self.assertEqual(1, len(findings))
         self.assertEqual(1, len(findings[0].unsaved_vulnerability_ids))
@@ -23,7 +24,6 @@ class TestNeuVectorParser(DojoTestCase):
 
     def test_parse_file_with_many_vulns(self):
         testfile = open(path.join(path.dirname(__file__), "../scans/neuvector/many_vulns.json"))
-        parser = NeuVectorParser()
-        findings = parser.get_findings(testfile, Test())
+        findings = self.parser.get_findings(testfile, Test())
         testfile.close()
         self.assertEqual(2, len(findings))
