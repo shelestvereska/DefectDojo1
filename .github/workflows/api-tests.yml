@@ -3,6 +3,9 @@ name: Api Tests and Change logs
 on:
   workflow_call:
 
+permissions:
+  checks: write
+
 jobs:
   api_tests:
     name: Api Tests and Change logs
@@ -54,7 +57,7 @@ jobs:
 
       - uses: stoplightio/spectral-action@v0.8.11
         with:
-          file_glob: oas.json
+          file_glob: ./oas.json
 
       # - name: Run OpenAPI Diff (from HEAD revision)
       #   uses: LimeFlight/openapi-diff-action@master
@@ -68,12 +71,6 @@ jobs:
       #     name: diff-reports
       #     path: ./output
 
-      - name: Check that the OpenAPI file is valid
-        uses: morigs/lint-api-docs-action@v1
-        with:
-          files-glob: ./oas.json
-          ruleset-file: ./.spectral.yaml
-          fail-severity: warn
 
       - name: Running OpenAPI Spec diff action
         uses: oasdiff/oasdiff-action/diff@v0.0.16
