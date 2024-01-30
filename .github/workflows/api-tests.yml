@@ -3,14 +3,16 @@ name: Api Tests and Change logs
 on:
   workflow_call:
 
-permissions:
-  checks: write
-
 jobs:
   api_tests:
     name: Api Tests and Change logs
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+      contents: write
     strategy:
+      fail-fast: false
       matrix:
         validator:
           - swagger-editor-validate
@@ -19,7 +21,6 @@ jobs:
           - oasdiff-diff
           - oasdiff-changelog
           - oasdiff-breaking
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -79,12 +80,24 @@ jobs:
           base: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
           revision: oas.json
           format: text
-
+      - uses: thollander/actions-comment-pull-request@v2
+        id: oasdiff_diff
+        if: matrix.validator == 'oasdiff-diff'
+        with:
+          message: ${{steps.oasdiff_diff.outputs.diff}}
+          comment_tag: oasdiff-diff
+          
       - uses: oasdiff/oasdiff-action/changelog@v0.0.16
+        id: oasdiff_changelog
         if: matrix.validator == 'oasdiff-changelog'
         with:
           base: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
           revision: oas.json
+      - uses: thollander/actions-comment-pull-request@v2
+        if: matrix.validator == 'oasdiff-changelog'
+        with:
+          message: ${{steps.oasdiff_changelog.outputs.changelog}}          
+          comment_tag: oasdiff-changelog
 
       - uses: oasdiff/oasdiff-action/breaking@v0.0.16
         if: matrix.validator == 'oasdiff-breaking'
