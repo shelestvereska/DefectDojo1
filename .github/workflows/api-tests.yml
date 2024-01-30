@@ -43,6 +43,10 @@ jobs:
           DJANGO_VERSION: alpine
           NGINX_VERSION: alpine
 
+      - name: Download OpenAPI Specifications - base
+        run: |-
+             wget 'https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json' -O oas_base.json
+
       - name: Download OpenAPI Specifications
         run: |-
              wget 'http://localhost:8080/api/v2/oa3/schema/?format=json' -O oas.json --tries=10 --retry-on-http-error=502
@@ -69,8 +73,8 @@ jobs:
       - uses: LimeFlight/openapi-diff-action@master
         if: matrix.validator == 'LimeFlight'
         with:
-          head_spec: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
-          base_spec: oas.json
+          head_spec: oas.json
+          base_spec: oas_base.json
           output_path: ./output
           github_token: ${{ github.token }}
 
