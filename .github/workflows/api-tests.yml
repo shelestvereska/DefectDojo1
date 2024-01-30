@@ -10,6 +10,15 @@ jobs:
   api_tests:
     name: Api Tests and Change logs
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        validator:
+          - swagger-editor-validate
+          - spectral
+          - LimeFlight
+          - oasdiff-diff
+          - oasdiff-changelog
+          - oasdiff-breaking
 
     steps:
       - name: Checkout
@@ -45,48 +54,40 @@ jobs:
         if: always()
         run: docker-compose --profile postgres-redis --env-file ./docker/environments/postgres-redis.env down
 
-      - name: Validate OpenAPI definition with swagger-editor
-        uses: char0n/swagger-editor-validate@v1
+      - uses: char0n/swagger-editor-validate@v1
+        if: matrix.validator == 'swagger-editor-validate'
         with:
           definition-file: oas.json
 
-      - name: thiyagu06/openapi-validator-actio
-        uses: thiyagu06/openapi-validator-action@v1
-        with:
-          filepath: oas.json
 
       - uses: stoplightio/spectral-action@v0.8.11
+        if: matrix.validator == 'spectral'
         with:
           file_glob: ./oas.json
 
-      # - name: Run OpenAPI Diff (from HEAD revision)
-      #   uses: LimeFlight/openapi-diff-action@master
-      #   with:
-      #     head_spec: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
-      #     base_spec: oas.json
-      #     output_path: ./output
-      #     github_token: ${{ github.token }}
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: diff-reports
-      #     path: ./output
+      - uses: LimeFlight/openapi-diff-action@master
+        if: matrix.validator == 'LimeFlight'
+        with:
+          head_spec: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
+          base_spec: oas.json
+          output_path: ./output
+          github_token: ${{ github.token }}
 
-
-      - name: Running OpenAPI Spec diff action
-        uses: oasdiff/oasdiff-action/diff@v0.0.16
+      - uses: oasdiff/oasdiff-action/diff@v0.0.16
+        if: matrix.validator == 'oasdiff-diff'
         with:
           base: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
           revision: oas.json
           format: text
 
-      - name: Running OpenAPI Spec diff action - changelog
-        uses: oasdiff/oasdiff-action/changelog@v0.0.16
+      - uses: oasdiff/oasdiff-action/changelog@v0.0.16
+        if: matrix.validator == 'oasdiff-changelog'
         with:
           base: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
           revision: oas.json
 
-      - name: Running OpenAPI Spec diff action - breaking
-        uses: oasdiff/oasdiff-action/breaking@v0.0.16
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.16
+        if: matrix.validator == 'oasdiff-breaking'
         with:
           base: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
           revision: oas.json
