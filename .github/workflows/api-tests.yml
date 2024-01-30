@@ -88,7 +88,8 @@ jobs:
         id: oasdiff_diff
         if: matrix.validator == 'oasdiff-diff'
         with:
-          message: ${{steps.oasdiff_diff.outputs.diff}}
+          message: |
+            ${{steps.oasdiff_diff.outputs.diff}}
           comment_tag: oasdiff-diff
           
       - uses: oasdiff/oasdiff-action/changelog@v0.0.16
@@ -100,7 +101,8 @@ jobs:
       - uses: thollander/actions-comment-pull-request@v2
         if: matrix.validator == 'oasdiff-changelog'
         with:
-          message: ${{steps.oasdiff_changelog.outputs.changelog}}          
+          message: |
+            ${{steps.oasdiff_changelog.outputs.changelog}}          
           comment_tag: oasdiff-changelog
 
       - uses: oasdiff/oasdiff-action/breaking@v0.0.16
