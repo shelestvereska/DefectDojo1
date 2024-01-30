@@ -1,0 +1,62 @@
+name: Api Tests and Change logs
+
+on:
+  workflow_call:
+
+jobs:
+  api_tests:
+    name: Api Tests and Change logs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # load docker images from build jobs
+      - name: Load images from artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Load docker images
+        run: |-
+             docker load -i nginx/nginx-alpine_img
+             docker load -i django/django-alpine_img
+             docker images
+
+      - name: Start Dojo
+        run: docker-compose --profile postgres-redis --env-file ./docker/environments/postgres-redis.env up --no-deps -d postgres nginx uwsgi
+        env:
+          DJANGO_VERSION: alpine
+          NGINX_VERSION: alpine
+
+      - name: Download OpenAPI Specifications
+        run: |-
+             wget 'http://localhost:8080/api/v2/oa3/schema/?format=json' -O oas.json --tries=10 --retry-on-http-error=502
+
+      - name: Logs
+        if: always()
+        run: docker-compose --profile postgres-redis --env-file ./docker/environments/postgres-redis.env logs --tail="2500"
+
+      - name: Shutdown
+        if: always()
+        run: docker-compose --profile postgres-redis --env-file ./docker/environments/postgres-redis.env down
+
+      - name: Running OpenAPI Spec diff action
+        uses: oasdiff/oasdiff-action/diff@v0.0.16
+        with:
+          base: 'https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json'
+          revision: 'oas.json'
+          format: text
+
+      - name: Running OpenAPI Spec diff action - changelog
+        uses: oasdiff/oasdiff-action/changelog@v0.0.16
+        with:
+          base: 'https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json'
+          revision: 'oas.json'
+
+      - name: Running OpenAPI Spec diff action - breaking
+        uses: oasdiff/oasdiff-action/breaking@v0.0.16
+        with:
+          base: 'https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json'
+          revision: 'oas.json'
