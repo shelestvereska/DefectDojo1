@@ -113,14 +113,14 @@ class FindingStatusFilter(ChoiceFilter):
 
     options = {
         None: (_('Any'), any),
-        0: (_('Open'), open),
-        1: (_('Verified'), verified),
-        2: (_('Out Of Scope'), out_of_scope),
-        3: (_('False Positive'), false_positive),
-        4: (_('Inactive'), inactive),
-        5: (_('Risk Accepted'), risk_accepted),
-        6: (_('Closed'), closed),
-        7: (_('Under Review'), under_review),
+        '0': (_('Open'), open),
+        '1': (_('Verified'), verified),
+        '2': (_('Out Of Scope'), out_of_scope),
+        '3': (_('False Positive'), false_positive),
+        '4': (_('Inactive'), inactive),
+        '5': (_('Risk Accepted'), risk_accepted),
+        '6': (_('Closed'), closed),
+        '7': (_('Under Review'), under_review),
     }
 
     def __init__(self, *args, **kwargs):
@@ -161,8 +161,8 @@ class FindingSLAFilter(ChoiceFilter):
 
     options = {
         None: (_('Any'), any),
-        0: (_('False'), satisfies_sla),
-        1: (_('True'), violates_sla),
+        '0': (_('False'), satisfies_sla),
+        '1': (_('True'), violates_sla),
     }
 
     def __init__(self, *args, **kwargs):
@@ -196,8 +196,8 @@ class ProductSLAFilter(ChoiceFilter):
 
     options = {
         None: (_('Any'), any),
-        0: (_('False'), satisfies_sla),
-        1: (_('True'), violates_sla),
+        '0': (_('False'), satisfies_sla),
+        '1': (_('True'), violates_sla),
     }
 
     def __init__(self, *args, **kwargs):
@@ -435,31 +435,31 @@ class FindingFilterWithTags(DojoFilter):
 class DateRangeFilter(ChoiceFilter):
     options = {
         None: (_('Any date'), lambda qs, name: qs.all()),
-        1: (_('Today'), lambda qs, name: qs.filter(**{
+        '1': (_('Today'), lambda qs, name: qs.filter(**{
             '%s__year' % name: now().year,
             '%s__month' % name: now().month,
             '%s__day' % name: now().day
         })),
-        2: (_('Past 7 days'), lambda qs, name: qs.filter(**{
+        '2': (_('Past 7 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() - timedelta(days=7)),
             '%s__lt' % name: _truncate(now() + timedelta(days=1)),
         })),
-        3: (_('Past 30 days'), lambda qs, name: qs.filter(**{
+        '3': (_('Past 30 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() - timedelta(days=30)),
             '%s__lt' % name: _truncate(now() + timedelta(days=1)),
         })),
-        4: (_('Past 90 days'), lambda qs, name: qs.filter(**{
+        '4': (_('Past 90 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() - timedelta(days=90)),
             '%s__lt' % name: _truncate(now() + timedelta(days=1)),
         })),
-        5: (_('Current month'), lambda qs, name: qs.filter(**{
+        '5': (_('Current month'), lambda qs, name: qs.filter(**{
             '%s__year' % name: now().year,
             '%s__month' % name: now().month
         })),
-        6: (_('Current year'), lambda qs, name: qs.filter(**{
+        '6': (_('Current year'), lambda qs, name: qs.filter(**{
             '%s__year' % name: now().year,
         })),
-        7: (_('Past year'), lambda qs, name: qs.filter(**{
+        '7': (_('Past year'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() - timedelta(days=365)),
             '%s__lt' % name: _truncate(now() + timedelta(days=1)),
         })),
@@ -481,47 +481,47 @@ class DateRangeFilter(ChoiceFilter):
 class DateRangeOmniFilter(ChoiceFilter):
     options = {
         None: (_('Any date'), lambda qs, name: qs.all()),
-        1: (_('Today'), lambda qs, name: qs.filter(**{
+        '1': (_('Today'), lambda qs, name: qs.filter(**{
             '%s__year' % name: now().year,
             '%s__month' % name: now().month,
             '%s__day' % name: now().day
         })),
-        2: (_('Next 7 days'), lambda qs, name: qs.filter(**{
+        '2': (_('Next 7 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() + timedelta(days=1)),
             '%s__lt' % name: _truncate(now() + timedelta(days=7)),
         })),
-        3: (_('Next 30 days'), lambda qs, name: qs.filter(**{
+        '3': (_('Next 30 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() + timedelta(days=1)),
             '%s__lt' % name: _truncate(now() + timedelta(days=30)),
         })),
-        4: (_('Next 90 days'), lambda qs, name: qs.filter(**{
+        '4': (_('Next 90 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() + timedelta(days=1)),
             '%s__lt' % name: _truncate(now() + timedelta(days=90)),
         })),
-        5: (_('Past 7 days'), lambda qs, name: qs.filter(**{
+        '5': (_('Past 7 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() - timedelta(days=7)),
             '%s__lt' % name: _truncate(now() + timedelta(days=1)),
         })),
-        6: (_('Past 30 days'), lambda qs, name: qs.filter(**{
+        '6': (_('Past 30 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() - timedelta(days=30)),
             '%s__lt' % name: _truncate(now() + timedelta(days=1)),
         })),
-        7: (_('Past 90 days'), lambda qs, name: qs.filter(**{
+        '7': (_('Past 90 days'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() - timedelta(days=90)),
             '%s__lt' % name: _truncate(now() + timedelta(days=1)),
         })),
-        8: (_('Current month'), lambda qs, name: qs.filter(**{
+        '8': (_('Current month'), lambda qs, name: qs.filter(**{
             '%s__year' % name: now().year,
             '%s__month' % name: now().month
         })),
-        9: (_('Past year'), lambda qs, name: qs.filter(**{
+        '9': (_('Past year'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() - timedelta(days=365)),
             '%s__lt' % name: _truncate(now() + timedelta(days=1)),
         })),
-        10: (_('Current year'), lambda qs, name: qs.filter(**{
+        '10': (_('Current year'), lambda qs, name: qs.filter(**{
             '%s__year' % name: now().year,
         })),
-        11: (_('Next year'), lambda qs, name: qs.filter(**{
+        '11': (_('Next year'), lambda qs, name: qs.filter(**{
             '%s__gte' % name: _truncate(now() + timedelta(days=1)),
             '%s__lt' % name: _truncate(now() + timedelta(days=365)),
         })),
@@ -543,10 +543,10 @@ class DateRangeOmniFilter(ChoiceFilter):
 class ReportBooleanFilter(ChoiceFilter):
     options = {
         None: (_('Either'), lambda qs, name: qs.all()),
-        1: (_('Yes'), lambda qs, name: qs.filter(**{
+        '1': (_('Yes'), lambda qs, name: qs.filter(**{
             '%s' % name: True
         })),
-        2: (_('No'), lambda qs, name: qs.filter(**{
+        '2': (_('No'), lambda qs, name: qs.filter(**{
             '%s' % name: False
         })),
     }
@@ -581,9 +581,9 @@ class ReportRiskAcceptanceFilter(ChoiceFilter):
 
     options = {
         None: (_('Either'), any),
-        1: (_('Yes'), accepted),
-        2: (_('No'), not_accepted),
-        3: (_('Expired'), was_accepted),
+        '1': (_('Yes'), accepted),
+        '2': (_('No'), not_accepted),
+        '3': (_('Expired'), was_accepted),
     }
 
     def __init__(self, *args, **kwargs):
@@ -652,13 +652,13 @@ class MetricsDateRangeFilter(ChoiceFilter):
 
     options = {
         None: (_('Past 30 days'), past_thirty_days),
-        1: (_('Past 7 days'), past_seven_days),
-        2: (_('Past 90 days'), past_ninety_days),
-        3: (_('Current month'), current_month),
-        4: (_('Current year'), current_year),
-        5: (_('Past 6 Months'), past_six_months),
-        6: (_('Past year'), past_year),
-        7: (_('Any date'), any),
+        '1': (_('Past 7 days'), past_seven_days),
+        '2': (_('Past 90 days'), past_ninety_days),
+        '3': (_('Current month'), current_month),
+        '4': (_('Current year'), current_year),
+        '5': (_('Past 6 Months'), past_six_months),
+        '6': (_('Past year'), past_year),
+        '7': (_('Any date'), any),
     }
 
     def __init__(self, *args, **kwargs):
@@ -2391,8 +2391,8 @@ class QuestionTypeFilter(ChoiceFilter):
 
     options = {
         None: (_('Any'), any),
-        1: (_('Text Question'), text_question),
-        2: (_('Choice Question'), choice_question),
+        '1': (_('Text Question'), text_question),
+        '2': (_('Choice Question'), choice_question),
     }
 
     def __init__(self, *args, **kwargs):
