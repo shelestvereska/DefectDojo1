@@ -80,7 +80,6 @@ jobs:
 
       - uses: oasdiff/oasdiff-action/diff@v0.0.16
         id: oasdiff_diff
-        uses: ./diff
         if: matrix.validator == 'oasdiff-diff'
         with:
           base: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
@@ -95,7 +94,6 @@ jobs:
           
       - uses: oasdiff/oasdiff-action/changelog@v0.0.16
         id: oasdiff_changelog
-        uses: ./changelog
         if: matrix.validator == 'oasdiff-changelog'
         with:
           base: https://github.com/DefectDojo/django-DefectDojo/releases/latest/download/oas.json
