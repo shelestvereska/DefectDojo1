@@ -89,7 +89,7 @@ jobs:
         if: matrix.validator == 'oasdiff-diff'
         with:
           message: |
-            ${{steps.oasdiff_diff.outputs.diff}}
+            ${{needs.oasdiff_diff.outputs.diff}}
           comment_tag: oasdiff-diff
           
       - uses: oasdiff/oasdiff-action/changelog@v0.0.16
@@ -102,7 +102,7 @@ jobs:
         if: matrix.validator == 'oasdiff-changelog'
         with:
           message: |
-            ${{steps.oasdiff_changelog.outputs.changelog}}          
+            ${{needs.oasdiff_changelog.outputs.changelog}}          
           comment_tag: oasdiff-changelog
 
       - uses: oasdiff/oasdiff-action/breaking@v0.0.16
