@@ -20,8 +20,6 @@ ignore =
     E128
     # Line break occurred before a binary operator (conflicting with black)
     W503
-    # undefined file name excpetion
-    F821
 
 
 exclude =
