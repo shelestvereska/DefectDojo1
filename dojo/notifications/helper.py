@@ -5,7 +5,6 @@ import yaml
 
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.conf import settings
 from django.db.models import Q, Count, Prefetch
 from django.template import TemplateDoesNotExist
 from django.template.loader import render_to_string
