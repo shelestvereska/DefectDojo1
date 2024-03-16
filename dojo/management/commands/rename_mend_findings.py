@@ -1,6 +1,11 @@
 from django.core.management.base import BaseCommand
 from pytz import timezone
 from dojo.celery import app
+from dojo.models import Test_Type, Finding
+from dojo.utils import get_system_setting
+import re
+import logging
+logger = logging.getLogger(__name__)
 
 locale = timezone(get_system_setting('time_zone'))
 
