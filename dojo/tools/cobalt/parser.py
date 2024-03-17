@@ -27,14 +27,11 @@ class CobaltParser(object):
         reader = csv.DictReader(
             io.StringIO(content), delimiter=",", quotechar='"'
         )
-        csvarray = []
-
         dupes = dict()
 
         # FIXME double loop, could lead to performance pb if the number of
         # issues is big
-        for row in reader:
-            csvarray.append(row)
+        csvarray = list(reader)
 
         for row in csvarray:
             finding = Finding(test=test)

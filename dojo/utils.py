@@ -201,9 +201,7 @@ def is_deduplication_on_engagement_mismatch(new_finding, to_duplicate_finding):
 
 
 def get_endpoints_as_url(finding):
-    list1 = []
-    for e in finding.endpoints.all():
-        list1.append(hyperlink.parse(str(e)))
+    list1 = [hyperlink.parse(str(e)) for e in finding.endpoints.all()]
     return list1
 
 
@@ -855,9 +853,7 @@ def get_punchcard_data(objs, start_date, weeks, view='Finding'):
 
 
 def get_week_data(week_start_date, tick, day_counts):
-    data = []
-    for i in range(0, len(day_counts)):
-        data.append([tick, i, day_counts[i]])
+    data = [[tick, i, day_counts[i]] for i in range(0, len(day_counts))]
     label = [tick, week_start_date.strftime("<span class='small'>%m/%d<br/>%Y</span>")]
     return data, label
 
@@ -2264,10 +2260,7 @@ def get_file_images(obj, return_objects=False):
 
 def get_enabled_notifications_list():
     # Alerts need to enabled by default
-    enabled = ['alert']
-    for choice in NOTIFICATION_CHOICES:
-        if get_system_setting('enable_{}_notifications'.format(choice[0])):
-            enabled.append(choice[0])
+    enabled = ['alert'] + [choice[0] for choice in NOTIFICATION_CHOICES if get_system_setting('enable_{}_notifications'.format(choice[0]))]
     return enabled
 
 
