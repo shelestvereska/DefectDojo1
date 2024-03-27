@@ -42,10 +42,7 @@ class KiuwanParser(object):
         reader = csv.DictReader(
             io.StringIO(content), delimiter=",", quotechar='"'
         )
-        csvarray = []
-
-        for row in reader:
-            csvarray.append(row)
+        csvarray = list(reader)
 
         dupes = dict()
         for row in csvarray:

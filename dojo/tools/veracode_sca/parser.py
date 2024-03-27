@@ -147,10 +147,7 @@ class VeracodeScaParser(object):
         reader = csv.DictReader(
             io.StringIO(content), delimiter=",", quotechar='"'
         )
-        csvarray = []
-
-        for row in reader:
-            csvarray.append(row)
+        csvarray = [row for row in reader]
 
         findings = []
         for row in csvarray:

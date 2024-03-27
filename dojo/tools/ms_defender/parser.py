@@ -41,16 +41,12 @@ class MSDefenderParser(object):
                         vulnerabilityfiles.append(content)
                     if "machines/" in content and "machines/" != content:
                         machinefiles.append(content)
-                vulnerabilities = list()
-                machines = list()
-                for vulnerabilityfile in vulnerabilityfiles:
-                    output = json.loads(zipdata[vulnerabilityfile].decode('ascii'))['value']
-                    for data in output:
-                        vulnerabilities.append(data)
-                for machinefile in machinefiles:
-                    output = json.loads(zipdata[machinefile].decode('ascii'))['value']
-                    for data in output:
-                        machines.append(data)
+                vulnerabilities = list(item
+                    for vulnerabilityfile in vulnerabilityfiles
+                        for item in json.loads(zipdata[vulnerabilityfile].decode('ascii'))['value'])
+                machines = list(item 
+                    for machinefile in machinefiles
+                        for item in json.loads(zipdata[machinefile].decode('ascii'))['value'])
                 for vulnerability in vulnerabilities:
                     try:
                         machine = list(filter(lambda m: m['id'] == vulnerability['machineId'], machines))[0]
