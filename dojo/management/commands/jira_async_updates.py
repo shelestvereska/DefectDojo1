@@ -3,6 +3,7 @@ from django.utils import timezone
 from jira.exceptions import JIRAError
 
 from dojo.models import Finding, Notes, User, Dojo_User
+import dojo.jira_link.helper as jira_helper
 
 """
 Author: Aaron Weaver

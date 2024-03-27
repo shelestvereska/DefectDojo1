@@ -16,8 +16,6 @@ ignore =
     E128
     # Line break occurred before a binary operator (conflicting with black)
     W503
-    # undefined file name excpetion
-    F821
 
 # We should not touch migrations that are already used, but check new migrations 
 per-file-ignores =

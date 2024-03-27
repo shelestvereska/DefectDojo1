@@ -4,6 +4,7 @@
 
 import base64
 import re
+from urlparse import urlparse
 import xml.etree.ElementTree
 from datetime import datetime
 from dojo.models import Endpoint, Finding
