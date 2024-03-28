@@ -1,8 +1,7 @@
 import hashlib
 import logging
-import re
-
-from defusedxml import ElementTree as ET
+from dojo.models import Endpoint, Finding
+from lxml import etree
 from django.core.exceptions import ValidationError
 
 from dojo.models import Endpoint, Finding

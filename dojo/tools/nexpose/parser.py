@@ -2,8 +2,8 @@ import re
 from datetime import datetime
 
 import html2text
-from defusedxml import ElementTree
-from django.conf import settings
+import re
+from lxml import etree
 from hyperlink._url import SCHEME_PORT_MAP
 
 from dojo.models import Endpoint, Finding
@@ -30,7 +30,7 @@ class NexposeParser:
         return "Use the full XML export template from Nexpose."
 
     def get_findings(self, xml_output, test):
-        tree = ElementTree.parse(xml_output)
+        tree = etree.parse(xml_output)
         vuln_definitions = self.get_vuln_definitions(tree)
         return self.get_items(tree, vuln_definitions, test)
 

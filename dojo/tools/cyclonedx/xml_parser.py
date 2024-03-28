@@ -2,8 +2,7 @@ import logging
 import re
 
 import dateutil
-from defusedxml import ElementTree
-
+from lxml import etree
 from dojo.models import Finding
 from dojo.tools.cyclonedx.helpers import Cyclonedxhelper
 
@@ -12,7 +11,7 @@ LOGGER = logging.getLogger(__name__)
 
 class CycloneDXXMLParser:
     def _get_findings_xml(self, file, test):
-        nscan = ElementTree.parse(file)
+        nscan = etree.parse(file)
         root = nscan.getroot()
         namespace = self.get_namespace(root)
         if not namespace.startswith("{http://cyclonedx.org/schema/bom/"):
