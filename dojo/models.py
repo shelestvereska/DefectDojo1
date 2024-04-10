@@ -2210,11 +2210,6 @@ class Finding(models.Model):
     cwe = models.IntegerField(default=0, null=True, blank=True,
                               verbose_name=_("CWE"),
                               help_text=_("The CWE number associated with this flaw."))
-    cve = models.CharField(max_length=50,
-                           null=True,
-                           blank=False,
-                           verbose_name=_("Vulnerability Id"),
-                           help_text=_("An id of a vulnerability in a security advisory associated with this finding. Can be a Common Vulnerabilities and Exposures (CVE) or from other sources."))
     epss_score = models.FloatField(default=None, null=True, blank=True,
                               verbose_name=_("EPSS Score"),
                               help_text=_("EPSS score for the CVE. Describes how likely it is the vulnerability will be exploited in the next 30 days."),
@@ -2532,7 +2527,6 @@ class Finding(models.Model):
 
             models.Index(fields=['test', 'component_name']),
 
-            models.Index(fields=['cve']),
             models.Index(fields=['epss_score']),
             models.Index(fields=['epss_percentile']),
             models.Index(fields=['cwe']),
@@ -3447,11 +3441,6 @@ class Finding_Group(TimeStampedModel):
 class Finding_Template(models.Model):
     title = models.TextField(max_length=1000)
     cwe = models.IntegerField(default=None, null=True, blank=True)
-    cve = models.CharField(max_length=50,
-                           null=True,
-                           blank=False,
-                           verbose_name="Vulnerability Id",
-                           help_text="An id of a vulnerability in a security advisory associated with this finding. Can be a Common Vulnerabilities and Exposures (CVE) or from other sources.")
     cvssv3_regex = RegexValidator(regex=r'^AV:[NALP]|AC:[LH]|PR:[UNLH]|UI:[NR]|S:[UC]|[CIA]:[NLH]', message="CVSS must be entered in format: 'AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H'")
     cvssv3 = models.TextField(validators=[cvssv3_regex], max_length=117, null=True)
     severity = models.CharField(max_length=200, null=True, blank=True)
