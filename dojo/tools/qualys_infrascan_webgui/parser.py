@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 import html2text
-from dateutil import parser
+import dateutil
 from lxml import etree
 from dojo.models import Endpoint, Finding
 
@@ -143,7 +143,7 @@ class QualysInfrascanWebguiParser:
         scan_date = datetime.now()
         for i in data.findall("HEADER/KEY"):
             if i.get("value") == "DATE":
-                scan_date = parser.isoparse(i.text)
+                scan_date = dateutil.parser.isoparse(i.text)
 
         master_list = []
         for issue in data.findall("IP"):
