@@ -24,9 +24,8 @@ class SonarQubeSoprasteriaHelper:
             return "Info"
 
     def get_description(self, vuln_details):
-        parser = etree.XMLParser(resolve_entities=False)
         rule_description = etree.tostring(
-            vuln_details, pretty_print=True, parser=parser
+            vuln_details, pretty_print=True
         ).decode("utf-8", errors="replace")
         rule_description = rule_description.split("<h2>See", 1)[0]
         rule_description = (str(rule_description)).replace("<h2>", "**")
