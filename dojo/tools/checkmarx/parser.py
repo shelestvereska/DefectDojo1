@@ -368,7 +368,7 @@ class CheckmarxParser:
 
     def _parse_date(self, value):
         if isinstance(value, str):
-            return parser.parse(value).date()
+            return dateutil.parser.parse(value).date()
         elif isinstance(value, dict) and isinstance(value.get("seconds"), int):
             return datetime.datetime.utcfromtimestamp(value.get("seconds")).date()
         else:
