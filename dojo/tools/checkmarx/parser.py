@@ -2,7 +2,7 @@ import datetime
 import json
 import logging
 
-from dateutil import parser
+import dateutil
 from lxml import etree
 
 from dojo.models import Finding
@@ -59,7 +59,7 @@ class CheckmarxParser:
             language = ""
             findingdetail = ""
             group = ""
-            find_date = parser.parse(root.get("ScanStart"), resolve_entities=False).date()
+            find_date = dateutil.parser.parse(root.get("ScanStart")).date()
 
             if query.get("Language") is not None:
                 language = query.get("Language")
