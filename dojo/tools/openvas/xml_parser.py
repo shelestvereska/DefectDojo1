@@ -6,7 +6,8 @@ from dojo.models import Finding
 class OpenVASXMLParser:
     def get_findings(self, filename, test):
         findings = []
-        tree = etree.parse(filename)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(filename, parser=parser)
         root = tree.getroot()
         if "report" not in root.tag:
             msg = "This doesn't seem to be a valid Greenbone OpenVAS XML file."

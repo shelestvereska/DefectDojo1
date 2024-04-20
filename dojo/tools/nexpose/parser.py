@@ -30,7 +30,8 @@ class NexposeParser:
         return "Use the full XML export template from Nexpose."
 
     def get_findings(self, xml_output, test):
-        tree = etree.parse(xml_output)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(xml_output, parser=parser)
         vuln_definitions = self.get_vuln_definitions(tree)
         return self.get_items(tree, vuln_definitions, test)
 

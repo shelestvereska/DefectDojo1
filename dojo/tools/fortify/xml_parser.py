@@ -4,7 +4,8 @@ from dojo.models import Finding
 
 class FortifyXMLParser:
     def parse_xml(self, filename, test):
-        fortify_scan = etree.parse(filename)
+        parser = etree.XMLParser(resolve_entities=False)
+        fortify_scan = etree.parse(filename, parser=parser)
         root = fortify_scan.getroot()
         # Get Category Information:
         # Abstract, Explanation, Recommendation, Tips

@@ -17,7 +17,8 @@ class SslscanParser:
         return "Import XML output of sslscan report."
 
     def get_findings(self, file, test):
-        tree = etree.parse(file)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(file, parser=parser)
         # get root of tree.
         root = tree.getroot()
         if "document" not in root.tag:

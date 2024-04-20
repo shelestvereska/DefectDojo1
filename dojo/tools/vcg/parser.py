@@ -104,7 +104,8 @@ class VCGXmlParser:
         if content is None:
             return dupes
 
-        vcgscan = etree.parse(content).getroot()
+        parser = etree.XMLParser(resolve_entities=False)
+        vcgscan = etree.parse(content, parser=parser).getroot()
 
         for issue in vcgscan.findall("CodeIssue"):
             finding = self.parse_issue(issue, test)

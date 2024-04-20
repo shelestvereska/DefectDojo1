@@ -27,7 +27,8 @@ class XanitizerParser:
 
     def parse_xml(self, filename):
         try:
-            tree = etree.parse(filename)
+            parser = etree.XMLParser(resolve_entities=False)
+            tree = etree.parse(filename, parser=parser)
         except SyntaxError as se:
             raise ValueError(se)
 

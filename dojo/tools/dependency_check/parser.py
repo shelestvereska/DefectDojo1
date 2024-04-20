@@ -350,7 +350,8 @@ class DependencyCheckParser:
     def get_findings(self, filename, test):
         dupes = {}
         namespace = ""
-        scan = etree.parse(filename).getroot()
+        parser = etree.XMLParser(resolve_entities=False)
+        scan = etree.parse(filename, parser=parser).getroot()
         regex = r"{.*}"
         matches = re.match(regex, scan.tag)
         try:

@@ -23,8 +23,8 @@ class SpotbugsParser:
         dupes = {}
 
         SEVERITY = {"1": "High", "2": "Medium", "3": "Low"}
-
-        tree = etree.parse(filename)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(filename, parser=parser)
         root = tree.getroot()
 
         html_parser = html2text.HTML2Text()

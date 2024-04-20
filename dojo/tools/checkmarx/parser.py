@@ -44,7 +44,8 @@ class CheckmarxParser:
         - Path: There should be only one.Parent tag of Pathnodes
         - Pathnode: all the calls from the source (start) to the sink (end) of the attack vector
         """
-        cxscan = etree.parse(filename)
+        parser = etree.XMLParser(resolve_entities=False)
+        cxscan = etree.parse(filename, parser=parser)
         root = cxscan.getroot()
 
         dupes = {}
@@ -58,7 +59,7 @@ class CheckmarxParser:
             language = ""
             findingdetail = ""
             group = ""
-            find_date = parser.parse(root.get("ScanStart")).date()
+            find_date = parser.parse(root.get("ScanStart"), resolve_entities=False).date()
 
             if query.get("Language") is not None:
                 language = query.get("Language")

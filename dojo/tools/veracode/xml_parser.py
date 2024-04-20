@@ -24,7 +24,8 @@ class VeracodeXMLParser:
     }
 
     def get_findings(self, filename, test):
-        root = etree.parse(filename).getroot()
+        parser = etree.XMLParser(resolve_entities=False)
+        root = etree.parse(filename, parser=parser).getroot()
 
         app_id = root.attrib["app_id"]
         report_date = datetime.strptime(

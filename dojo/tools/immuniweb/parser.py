@@ -16,7 +16,8 @@ class ImmuniwebParser:
         return "XML Scan Result File from Imuniweb Scan."
 
     def get_findings(self, file, test):
-        ImmuniScanTree = etree.parse(file)
+        parser = etree.XMLParser(resolve_entities=False)
+        ImmuniScanTree = etree.parse(file, parser=parser)
         root = ImmuniScanTree.getroot()
         # validate XML file
         if "Vulnerabilities" not in root.tag:

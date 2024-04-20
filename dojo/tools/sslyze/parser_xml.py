@@ -50,7 +50,8 @@ PROTOCOLS = ["sslv2", "sslv3", "tlsv1", "tlsv1_1", "tlsv1_2", "tlsv1_3"]
 
 class SSLyzeXMLParser:
     def get_findings(self, file, test):
-        tree = etree.parse(file)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(file, parser=parser)
         # get root of tree.
         root = tree.getroot()
         if "document" not in root.tag:

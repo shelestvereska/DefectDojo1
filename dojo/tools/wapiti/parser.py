@@ -22,7 +22,8 @@ class WapitiParser:
         return "Import XML report"
 
     def get_findings(self, file, test):
-        tree = etree.parse(file)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(file, parser=parser)
         # get root of tree.
         root = tree.getroot()
         # check if it is

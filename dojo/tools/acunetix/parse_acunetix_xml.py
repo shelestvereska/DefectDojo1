@@ -15,7 +15,8 @@ class AcunetixXMLParser:
     """This parser is written for Acunetix XML reports"""
     def get_findings(self, filename, test):
         dupes = {}
-        root = etree.parse(filename).getroot()
+        parser = etree.XMLParser(resolve_entities=False)
+        root = etree.parse(filename, parser=parser).getroot()
         for scan in root.findall("Scan"):
             start_url = scan.findtext("StartURL")
             if ":" not in start_url:

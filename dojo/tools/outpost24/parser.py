@@ -16,7 +16,8 @@ class Outpost24Parser:
         return "Import Outpost24 endpoint vulnerability scan in XML format."
 
     def get_findings(self, file, test):
-        tree = etree.parse(file)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(file, parser=parser)
         items = []
         for detail in tree.iterfind(".//detaillist/detail"):
             # finding details

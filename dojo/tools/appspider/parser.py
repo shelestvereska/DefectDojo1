@@ -18,8 +18,8 @@ class AppSpiderParser:
     def get_findings(self, filename, test):
         if filename is None:
             return
-
-        vscan = etree.parse(filename)
+        parser = etree.XMLParser(resolve_entities=False)
+        vscan = etree.parse(filename, parser=parser)
         root = vscan.getroot()
 
         if "VulnSummary" not in str(root.tag):

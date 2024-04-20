@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 class NiktoXMLParser:
     def process_xml(self, file, test):
         dupes = {}
-        tree = ET.parse(file)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(file, parser=parser)
         root = tree.getroot()
         scan = root.find("scandetails")
         if scan is not None:

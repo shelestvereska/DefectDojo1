@@ -18,7 +18,8 @@ class OpenscapParser:
         return "Import Openscap Vulnerability Scan in XML formats."
 
     def get_findings(self, file, test):
-        tree = etree.parse(file)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(file, parser=parser)
         # get root of tree.
         root = tree.getroot()
         namespace = self.get_namespace(root)

@@ -44,7 +44,8 @@ class TestVCGXmlParser(DojoTestCase):
 
     def test_parseissuexml_with_issue_has_finding(self):
         single_finding = open("unittests/scans/vcg/one_finding.xml")
-        vcgscan = etree.parse(single_finding)
+        parser = etree.XMLParser(resolve_entities=False)
+        vcgscan = etree.parse(single_finding, parser=parser)
         finding = self.parser.parse_issue(vcgscan.findall("CodeIssue")[0], Test())
         self.assertEqual("Info", finding.severity)
         self.assertEqual("Comment Indicates Potentially Unfinished Code", finding.title)

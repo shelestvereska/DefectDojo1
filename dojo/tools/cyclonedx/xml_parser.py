@@ -11,7 +11,8 @@ LOGGER = logging.getLogger(__name__)
 
 class CycloneDXXMLParser:
     def _get_findings_xml(self, file, test):
-        nscan = etree.parse(file)
+        parser = etree.XMLParser(resolve_entities=False)
+        nscan = etree.parse(file, parser=parser)
         root = nscan.getroot()
         namespace = self.get_namespace(root)
         if not namespace.startswith("{http://cyclonedx.org/schema/bom/"):

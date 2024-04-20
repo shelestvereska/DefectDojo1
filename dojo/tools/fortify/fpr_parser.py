@@ -11,7 +11,8 @@ class FortifyFPRParser:
         else:
             input_zip = zipfile.ZipFile(filename, 'r')
         zipdata = {name: input_zip.read(name) for name in input_zip.namelist()}
-        root = etree.fromstring(zipdata["audit.fvdl"])
+        parser = etree.XMLParser(resolve_entities=False)
+        root = etree.fromstring(zipdata["audit.fvdl"], parser=parser)
         regex = r"{.*}"
         matches = re.match(regex, root.tag)
         try:

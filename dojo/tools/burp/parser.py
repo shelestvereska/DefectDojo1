@@ -30,7 +30,8 @@ class BurpParser:
         )
 
     def get_findings(self, xml_output, test):
-        tree = etree.parse(xml_output)
+        parser = etree.XMLParser(resolve_entities=False)
+        tree = etree.parse(xml_output, parser=parser)
         return self.get_items(tree, test)
 
     def get_items(self, tree, test):
