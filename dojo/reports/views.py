@@ -373,6 +373,7 @@ def generate_report(request, obj, host_view=False):
     include_table_of_contents = int(request.GET.get('include_table_of_contents', 0))
     include_disclaimer = int(request.GET.get('include_disclaimer', 0))
     disclaimer = get_system_setting('disclaimer')
+    report_css_style = get_system_setting('default_report_template_style', 'report_base.css')
     if include_disclaimer and len(disclaimer) == 0:
         disclaimer = 'Please configure in System Settings.'
     generate = "_generate" in request.GET
@@ -413,6 +414,7 @@ def generate_report(request, obj, host_view=False):
                    'engagements': engagements,
                    'tests': tests,
                    'report_name': report_name,
+                   'report_css_style': report_css_style,
                    'endpoint_opened_per_month': endpoint_monthly_counts[
                        'opened_per_period'] if endpoint_monthly_counts is not None else [],
                    'endpoint_active_findings': findings.qs.distinct().order_by('numerical_severity'),
@@ -444,6 +446,7 @@ def generate_report(request, obj, host_view=False):
                    'engagements': engagements,
                    'tests': tests,
                    'report_name': report_name,
+                   'report_css_style': report_css_style,
                    'findings': findings.qs.distinct().order_by('numerical_severity'),
                    'include_finding_notes': include_finding_notes,
                    'include_finding_images': include_finding_images,
@@ -474,6 +477,7 @@ def generate_report(request, obj, host_view=False):
         context = {'engagement': engagement,
                    'tests': tests,
                    'report_name': report_name,
+                   'report_css_style': report_css_style,
                    'findings': findings.qs.distinct().order_by('numerical_severity'),
                    'include_finding_notes': include_finding_notes,
                    'include_finding_images': include_finding_images,
@@ -498,6 +502,7 @@ def generate_report(request, obj, host_view=False):
 
         context = {'test': test,
                    'report_name': report_name,
+                   'report_css_style': report_css_style,
                    'findings': findings.qs.distinct().order_by('numerical_severity'),
                    'include_finding_notes': include_finding_notes,
                    'include_finding_images': include_finding_images,
@@ -529,6 +534,7 @@ def generate_report(request, obj, host_view=False):
         context = {'endpoint': endpoint,
                    'endpoints': endpoints,
                    'report_name': report_name,
+                   'report_css_style': report_css_style,
                    'findings': findings.qs.distinct().order_by('numerical_severity'),
                    'include_finding_notes': include_finding_notes,
                    'include_finding_images': include_finding_images,
@@ -549,6 +555,7 @@ def generate_report(request, obj, host_view=False):
 
         context = {'findings': findings.qs.distinct().order_by('numerical_severity'),
                    'report_name': report_name,
+                   'report_css_style': report_css_style,
                    'include_finding_notes': include_finding_notes,
                    'include_finding_images': include_finding_images,
                    'include_executive_summary': include_executive_summary,
@@ -597,6 +604,7 @@ def generate_report(request, obj, host_view=False):
                            'product': product,
                            'engagement': engagement,
                            'report_name': report_name,
+                           'report_css_style': report_css_style,
                            'test': test,
                            'endpoint': endpoint,
                            'endpoints': endpoints,
