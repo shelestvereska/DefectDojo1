@@ -391,7 +391,7 @@ def report_widget_factory(json_data=None, request=None, finding_notes=False, fin
                     d[item['name']] = item['value']
 
             endpoints = Endpoint.objects.filter(id__in=endpoints)
-            filter_string_matching = get_system_setting("filter_string_matching", False)
+            filter_string_matching = get_system_setting("filter_string_matching", default=False)
             filter_class = EndpointFilterWithoutObjectLookups if filter_string_matching else EndpointFilter
             endpoints = filter_class(d, queryset=endpoints, user=request.user)
             endpoints = EndpointList(request=request, endpoints=endpoints, finding_notes=finding_notes,
