@@ -1,5 +1,7 @@
 import logging
+
 from lxml import etree
+
 from dojo.models import Finding
 
 logger = logging.getLogger(__name__)

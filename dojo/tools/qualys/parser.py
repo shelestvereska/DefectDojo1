@@ -2,9 +2,9 @@ import datetime
 import logging
 
 import html2text
-from lxml import etree
 from cvss import CVSS3
 from django.conf import settings
+from lxml import etree
 
 from dojo.models import Endpoint, Finding
 from dojo.tools.qualys import csv_parser

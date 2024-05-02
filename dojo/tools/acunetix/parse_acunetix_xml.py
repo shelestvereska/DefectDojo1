@@ -6,6 +6,7 @@ import html2text
 import hyperlink
 from cvss import parser as cvss_parser
 from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 logger = logging.getLogger(__name__)

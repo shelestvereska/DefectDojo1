@@ -1,8 +1,8 @@
 import hashlib
 import logging
-from dojo.models import Endpoint, Finding
-from lxml import etree
+
 from django.core.exceptions import ValidationError
+from lxml import etree
 
 from dojo.models import Endpoint, Finding
 

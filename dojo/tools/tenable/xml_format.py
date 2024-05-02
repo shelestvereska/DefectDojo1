@@ -1,8 +1,9 @@
 import logging
 import re
+
 from cvss import CVSS3
-from lxml import etree
 from hyperlink._url import SCHEME_PORT_MAP
+from lxml import etree
 
 from dojo.models import Endpoint, Finding, Test
 

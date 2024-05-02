@@ -1,5 +1,6 @@
-from lxml import etree
 from html2text import html2text
+from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 

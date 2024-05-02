@@ -1,9 +1,10 @@
 import logging
 from datetime import datetime
 
-import html2text
 import dateutil
+import html2text
 from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 logger = logging.getLogger(__name__)

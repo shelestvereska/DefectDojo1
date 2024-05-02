@@ -1,6 +1,8 @@
 import re
 import zipfile
+
 from lxml import etree
+
 from dojo.models import Finding
 
 

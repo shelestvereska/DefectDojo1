@@ -1,6 +1,8 @@
 import hashlib
 import logging
+
 from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 LOGGER = logging.getLogger(__name__)

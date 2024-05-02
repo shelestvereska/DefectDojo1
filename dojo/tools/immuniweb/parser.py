@@ -1,5 +1,7 @@
 import hashlib
+
 from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 __author__ = "properam"

@@ -1,6 +1,8 @@
 import hashlib
 from xml.dom import NamespaceErr
+
 from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 __author__ = "dr3dd589"

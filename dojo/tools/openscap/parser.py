@@ -1,9 +1,10 @@
 import hashlib
 import re
 
-from lxml import etree
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_ipv46_address
+from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 

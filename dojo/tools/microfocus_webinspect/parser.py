@@ -1,7 +1,9 @@
 import hashlib
 import re
+
 import html2text
 from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 

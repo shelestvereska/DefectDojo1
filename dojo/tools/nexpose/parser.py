@@ -2,9 +2,8 @@ import re
 from datetime import datetime
 
 import html2text
-import re
-from lxml import etree
 from hyperlink._url import SCHEME_PORT_MAP
+from lxml import etree
 
 from dojo.models import Endpoint, Finding
 

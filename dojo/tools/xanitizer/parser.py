@@ -1,7 +1,9 @@
 __author__ = "jankuehl"
 
 import re
+
 from lxml import etree
+
 from dojo.models import Finding
 
 

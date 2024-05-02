@@ -1,5 +1,7 @@
 from xml.dom import NamespaceErr
+
 from lxml import etree
+
 from dojo.models import Finding
 
 

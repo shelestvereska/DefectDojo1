@@ -3,6 +3,7 @@ import re
 
 import dateutil
 from lxml import etree
+
 from dojo.models import Finding
 from dojo.tools.cyclonedx.helpers import Cyclonedxhelper
 

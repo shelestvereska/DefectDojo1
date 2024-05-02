@@ -1,7 +1,9 @@
 import csv
 import hashlib
 import io
+
 from lxml import etree
+
 from dojo.models import Finding
 
 

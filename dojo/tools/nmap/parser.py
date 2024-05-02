@@ -2,6 +2,7 @@ import datetime
 
 from cpe import CPE
 from lxml import etree
+
 from dojo.models import Endpoint, Finding
 
 
