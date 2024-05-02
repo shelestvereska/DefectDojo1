@@ -1,5 +1,6 @@
 import hashlib
 import logging
+import re
 
 from django.core.exceptions import ValidationError
 from lxml import etree

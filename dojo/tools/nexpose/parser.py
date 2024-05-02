@@ -2,6 +2,7 @@ import re
 from datetime import datetime
 
 import html2text
+from django.conf import settings
 from hyperlink._url import SCHEME_PORT_MAP
 from lxml import etree
 

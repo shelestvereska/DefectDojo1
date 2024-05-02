@@ -1,4 +1,5 @@
 import csv
+import io
 
 from lxml import etree
 
