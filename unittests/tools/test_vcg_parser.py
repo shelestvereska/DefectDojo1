@@ -27,30 +27,30 @@ class TestVCGXmlParser(DojoTestCase):
         self.assertEqual(0, len(results))
 
     def test_parse_single_finding(self):
-        single_finding = open("unittests/scans/vcg/single_finding.xml")
-        results = self.parser.parse(single_finding, Test())
-        self.assertEqual(1, len(results))
+        with open('unittests/scans/vcg/single_finding.xml') as single_finding:
+            results = self.parser.parse(single_finding, Test())
+            self.assertEqual(1, len(results))
 
     def test_parse_multiple_findings(self):
-        findings = open("unittests/scans/vcg/multiple_findings.xml")
-        results = self.parser.parse(findings, Test())
-        self.assertEqual(2, len(results))
+        with open('unittests/scans/vcg/multiple_findings.xml') as findings:
+            results = self.parser.parse(findings, Test())
+            self.assertEqual(2, len(results))
 
     def test_parse_duplicate_findings_dedupes(self):
-        duplicate_finding = open("unittests/scans/vcg/duplicate_findings_dedupes.xml")
-        results = self.parser.parse(duplicate_finding, Test())
-        self.assertEqual(1, len(results))
+        with open("unittests/scans/vcg/duplicate_findings_dedupes.xml") as duplicate_finding:
+            results = self.parser.parse(duplicate_finding, Test())
+            self.assertEqual(1, len(results))
 
     def test_parseissuexml_with_no_issue_has_no_finding(self):
         self.assertIsNone(self.parser.parse_issue(None, Test()))
 
     def test_parseissuexml_with_issue_has_finding(self):
-        single_finding = open("unittests/scans/vcg/one_finding.xml")
-        parser = etree.XMLParser(resolve_entities=False)
-        vcgscan = etree.parse(single_finding, parser=parser)
-        finding = self.parser.parse_issue(vcgscan.findall("CodeIssue")[0], Test())
-        self.assertEqual("Info", finding.severity)
-        self.assertEqual("Comment Indicates Potentially Unfinished Code", finding.title)
+        with open("unittests/scans/vcg/one_finding.xml") as single_finding:
+            parser = etree.XMLParser(resolve_entities=False)
+            vcgscan = etree.parse(single_finding, parser=parser)
+            finding = self.parser.parse_issue(vcgscan.findall("CodeIssue")[0], Test())
+            self.assertEqual("Info", finding.severity)
+            self.assertEqual("Comment Indicates Potentially Unfinished Code", finding.title)
 
 
 class TestVCGCsvParser(DojoTestCase):
@@ -115,11 +115,11 @@ class TestVCGCsvParser(DojoTestCase):
 class TestVCGImport(DojoTestCase):
 
     def test_can_parse_xml(self):
-        content = open("unittests/scans/vcg/can_parse_xml.xml")
-        filename = TestFile("data.xml", content)
-        parser = VCGParser()
-        findings = parser.get_findings(filename, Test())
-        self.assertEqual(1, len(findings))
+        with open("unittests/scans/vcg/can_parse_xml.xml") as content:
+            filename = TestFile("data.xml", content)
+            parser = VCGParser()
+            findings = parser.get_findings(filename, Test())
+            self.assertEqual(1, len(findings))
 
     def test_can_parse_csv(self):
         content = (
