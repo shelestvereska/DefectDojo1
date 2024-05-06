@@ -696,14 +696,14 @@ def prefetch_related_findings_for_report(findings):
                                      'notes',
                                      'files',
                                      'reporter',
-                                     'mitigated_by'
+                                     'mitigated_by',
                                      )
 
 
 def prefetch_related_endpoints_for_report(endpoints):
     return endpoints.prefetch_related(
                                       'product',
-                                      'tags'
+                                      'tags',
                                      )
 
 
@@ -1133,7 +1133,7 @@ class ExcelExportView(View):
 
         response = HttpResponse(
             content=stream,
-            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
         response['Content-Disposition'] = 'attachment; filename=findings.xlsx'
         return response
