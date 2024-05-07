@@ -1,18 +1,18 @@
 dependencies:
 - name: mysql
   repository: https://charts.bitnami.com/bitnami
-  version: 9.19.1
+  version: 10.2.1
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 15.2.7
+  version: 15.2.8
 - name: postgresql-ha
   repository: https://charts.bitnami.com/bitnami
   version: 9.4.11
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
-  version: 14.1.0
+  version: 14.1.1
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 19.1.5
-digest: sha256:489bde31da1ba28130baef3c49292e052a50bbc3726de037b3778bdb091c7cad
-generated: "2024-04-30T12:26:32.131451724Z"
+digest: sha256:daeb808d6cf1fa0de150f7d5df472554b79baa70c327d5b2e707d5d654b2a6f7
+generated: "2024-05-02T03:30:09.045285434Z"
